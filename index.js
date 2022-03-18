@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { talkerRouter } = require('./routers/index');
+const { talkerRouter, loginRouter } = require('./routers/index');
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,6 +14,8 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/talker', talkerRouter);
+
+app.use('/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log('Online');
