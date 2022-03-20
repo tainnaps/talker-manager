@@ -33,8 +33,7 @@ router.get('/:id', readFile, (req, res) => {
   res.status(200).json(searchedTalker);
 });
 
-router.post(
-  '/',
+router.use([
   validateToken,
   validateName,
   validateAge,
@@ -42,36 +41,27 @@ router.post(
   validateTalkDate,
   validateTalkRate,
   readFile,
-  async (req, res) => {
-    const { talkers, body } = req;
-    const lastTalkerId = talkers[talkers.length - 1].id;
-    const newTalker = { id: lastTalkerId + 1, ...body };
+]);
 
-    await fs.writeFile('./talker.json', JSON.stringify([...talkers, newTalker]));
+router.post('/', async (req, res) => {
+  const { talkers, body } = req;
+  const lastTalkerId = talkers[talkers.length - 1].id;
+  const newTalker = { id: lastTalkerId + 1, ...body };
 
-    res.status(201).json(newTalker);
-  },
-);
+  await fs.writeFile('./talker.json', JSON.stringify([...talkers, newTalker]));
 
-router.put(
-  '/:id',
-  validateToken,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateTalkDate,
-  validateTalkRate,
-  readFile,
-  async (req, res) => {
-    const { talkers, body } = req;
-    const { id } = req.params;
-    const index = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
-    talkers[index] = { ...talkers[index], ...body };
+  res.status(201).json(newTalker);
+});
 
-    await fs.writeFile('./talker.json', JSON.stringify([...talkers]));
+router.put('/:id', async (req, res) => {
+  const { talkers, body } = req;
+  const { id } = req.params;
+  const index = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  talkers[index] = { ...talkers[index], ...body };
 
-    res.status(200).json(talkers[index]);
-  },
-);
+  await fs.writeFile('./talker.json', JSON.stringify([...talkers]));
+
+  res.status(200).json(talkers[index]);
+});
 
 module.exports = router;
