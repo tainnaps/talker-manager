@@ -53,4 +53,25 @@ router.post(
   },
 );
 
+router.put(
+  '/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
+  readFile,
+  async (req, res) => {
+    const { talkers, body } = req;
+    const { id } = req.params;
+    const index = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+    talkers[index] = { ...talkers[index], ...body };
+
+    await fs.writeFile('./talker.json', JSON.stringify([...talkers]));
+
+    res.status(200).json(talkers[index]);
+  },
+);
+
 module.exports = router;
