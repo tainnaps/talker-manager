@@ -44,8 +44,8 @@ router.post(
   readFile,
   async (req, res) => {
     const { talkers, body } = req;
-    const newTalkerId = talkers[talkers.length - 1].id + 1;
-    const newTalker = { id: newTalkerId, ...body };
+    const lastTalkerId = talkers[talkers.length - 1].id;
+    const newTalker = { id: lastTalkerId + 1, ...body };
 
     await fs.writeFile('./talker.json', JSON.stringify([...talkers, newTalker]));
 
