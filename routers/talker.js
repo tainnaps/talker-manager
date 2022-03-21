@@ -37,7 +37,15 @@ router.get('/:id', (req, res) => {
 
 router.use(validateToken);
 
-router.delete('/talker/:id');
+router.delete('/:id', async (req, res) => {
+  const { talkers } = req;
+  const { id } = req.params;
+  const filteredTalkers = talkers.filter((talker) => talker.id !== parseInt(id, 10));
+
+  await fs.writeFile('./talker.json', JSON.stringify([...filteredTalkers]));
+
+  res.status(204);
+});
 
 router.use([
   validateName,
