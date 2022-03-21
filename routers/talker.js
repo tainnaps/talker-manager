@@ -44,7 +44,7 @@ router.delete('/:id', async (req, res) => {
 
   await fs.writeFile('./talker.json', JSON.stringify([...filteredTalkers]));
 
-  res.status(204);
+  res.status(204).json();
 });
 
 router.use([
