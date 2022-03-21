@@ -10,7 +10,9 @@ const {
   validateTalkRate,
 } = require('../middlewares/index');
 
-router.get('/', readFile, (req, res) => {
+router.use(readFile);
+
+router.get('/', (req, res) => {
   const { talkers } = req;
 
   if (talkers.length === 0) {
@@ -20,7 +22,7 @@ router.get('/', readFile, (req, res) => {
   res.status(200).json(talkers);
 });
 
-router.get('/:id', readFile, (req, res) => {
+router.get('/:id', (req, res) => {
   const { id } = req.params;
   const { talkers } = req;
   const searchedTalker = talkers.find((talker) => talker.id === parseInt(id, 10));
@@ -33,14 +35,16 @@ router.get('/:id', readFile, (req, res) => {
   res.status(200).json(searchedTalker);
 });
 
+router.use(validateToken);
+
+router.delete('/talker/:id');
+
 router.use([
-  validateToken,
   validateName,
   validateAge,
   validateTalk,
   validateTalkDate,
   validateTalkRate,
-  readFile,
 ]);
 
 router.post('/', async (req, res) => {
