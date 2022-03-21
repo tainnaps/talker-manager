@@ -1,7 +1,11 @@
 const validateTalkDate = (req, res, next) => {
   const { talk: { watchedAt } } = req.body;
+  /* Utilizei o link abaixo como referência para construir minha regex.
+    link: https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Regular_Expressions */
   const dateRegex = /\d{2}\/\d{2}\/\d{4}/;
 
+  /* Utilizei o link abaixo como referência para testar minha regex.
+    link: https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test */
   if (!dateRegex.test(watchedAt)) {
     const message = 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"';
     return res.status(400).json({ message });
