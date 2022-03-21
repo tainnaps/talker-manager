@@ -12,6 +12,23 @@ const {
 
 router.use(readFile);
 
+router.get('/search', validateToken, (req, res) => {
+  const { talkers } = req;
+  const { q: searchTerm } = req.query;
+
+  if (!searchTerm) {
+    return res.status(200).json(talkers);
+  }
+
+  const filteredTalkers = talkers.filter(({ name }) => name.includes(searchTerm));
+
+  if (filteredTalkers.length === 0) {
+    return res.status(200).json([]);
+  }
+
+  res.status(200).json(filteredTalkers);
+});
+
 router.get('/', (req, res) => {
   const { talkers } = req;
 
